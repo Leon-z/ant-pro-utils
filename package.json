@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Leon-z/ant-pro-utils/issues"
   },
-  "homepage": "https://github.com/Leon-z/ant-pro-utils#readme"
+  "homepage": "https://github.com/Leon-z/ant-pro-utils#readme",
+  "devDependencies": {
+    "plop": "^2.5.4"
+  }
 }
