@@ -2,7 +2,10 @@
   "name": "ant-pro-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/ap-utils.js",
+  "bin": {
+    "ap-utils": "./bin/ap-utils.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,7 +19,13 @@
     "url": "https://github.com/Leon-z/ant-pro-utils/issues"
   },
   "homepage": "https://github.com/Leon-z/ant-pro-utils#readme",
-  "devDependencies": {
-    "plop": "^2.5.4"
+  "devDependencies": {},
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "axios": "^0.19.2",
+    "chalk": "^3.0.0",
+    "json-to-ts": "^1.6.0",
+    "minimist": "^1.2.0",
+    "node-plop": "^0.24.0"
   }
 }
