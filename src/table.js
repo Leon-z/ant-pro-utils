@@ -30,7 +30,7 @@ module.exports = function(url) {
       // 生成模板
       const page = template(pageTemplatePath, { keys })
       const entities = template(entitiesTemplatePath, { listTs: `${JsonToTS(resultList)}` })
-      const service = template(serviceTemplatePath, { url })
+      const service = template(serviceTemplatePath, { url: res.request.path })
       // 插入文件
       writeFile(pageDirPath, 'index.tsx', page)
       writeFile(pageDirPath, 'entities.ts', entities)
