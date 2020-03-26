@@ -11,10 +11,12 @@ const { dirExists } = require('./fileUtils')
 
 const error = chalk.bold.red;
 const successs = chalk.bold.green;
-const pageTemplatePath = resolve(__dirname, '../templates/page.tsx')
-const entitiesTemplatePath = resolve(__dirname,'../templates/entities.ts')
-const serviceTemplatePath = resolve(__dirname, '../templates/service.ts')
+const pageTemplatePath = resolve(__dirname, '../templates/TableListPage/page.tsx')
+const entitiesTemplatePath = resolve(__dirname,'../templates/TableListPage/entities.ts')
+const serviceTemplatePath = resolve(__dirname, '../templates/TableListPage/service.ts')
+const createNewComponentTemplatePath = resolve(__dirname, '../templates/TableListPage/components/CreateForm.tsx')
 const pageDirPath = resolve(process.cwd(), 'src/pages/AntProTablePage')
+const componentDirPath = resolve(process.cwd(), 'src/pages/AntProTablePage/components')
 
 module.exports = function(url) {
 
@@ -23,18 +25,20 @@ module.exports = function(url) {
     .then(res => {
       const { data: { data: { resultList}} } = res
       const keys = Object.keys(resultList[0])
-      const columns = keys.map(key => ({
-        title: key,
-        dataIndex: key,
-      }))
+
+
       // 生成模板
       const page = template(pageTemplatePath, { keys })
       const entities = template(entitiesTemplatePath, { listTs: `${JsonToTS(resultList)}` })
       const service = template(serviceTemplatePath, { url: res.request.path })
+      const createNewComponent = template(createNewComponentTemplatePath, {})
+      
       // 插入文件
-      writeFile(pageDirPath, 'index.tsx', page)
-      writeFile(pageDirPath, 'entities.ts', entities)
-      writeFile(pageDirPath, 'service.ts', service)
+      writeFile(componentDirPath, 'CreateForm.tsx', createNewComponent, () => {
+        writeFile(pageDirPath, 'index.tsx', page)
+        writeFile(pageDirPath, 'entities.ts', entities)
+        writeFile(pageDirPath, 'service.ts', service)
+      }) // 先插入组件 因为需要创建目录
     })
     .catch(e => {
       console.log(e);
@@ -48,13 +52,16 @@ module.exports = function(url) {
 }
 
 
-async function writeFile(path,fileName,  content) {
+async function writeFile(path,fileName,  content, callback) {
   await dirExists(path);
   fs.writeFile(`${path}/${fileName}`, content, function (err) {
     if (err) {
       return console.log(err);
     }
     console.log(successs(`写入${fileName}文件成功`));
+    if (callback) {
+      callback()
+    }
   });
 }
 
