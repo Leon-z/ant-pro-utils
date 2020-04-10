@@ -31,6 +31,7 @@ class TableList extends BaseTablePage<TableListProps, TableListState> {
     this.state = {
       ...this.state, // 这个不能删，要继承basePage的state
       showCreateModal: false,
+      columnsStateList: this.getColumnsStateList(),
     }
   }
 
@@ -51,19 +52,18 @@ class TableList extends BaseTablePage<TableListProps, TableListState> {
       })
   }
 
-  /** 渲染新建按钮 */
-  renderCreateNew = () => {
-    return (
-      <Button
-        icon='plus'
-        type='primary'
-        onClick={this.changeCreatModalVisible(true)}
-      >
-        新建
-      </Button>
-    )
-  }
-
+  renderToolBar = () => [
+    <Button
+      icon='plus'
+      type='primary'
+      key='create'
+      onClick={this.changeCreatModalVisible(true)}
+    >
+      新建
+      </Button>,
+    this.renderColumns(),
+  ];
+  
   render() {
     const tableCfg = this.getTableConfig()
     const { showCreateModal } = this.state
@@ -71,7 +71,7 @@ class TableList extends BaseTablePage<TableListProps, TableListState> {
       <PageHeaderWrapper>
         <ProTable<dataEntites>
           {...tableCfg}
-          toolBarRender={() => [this.renderCreateNew()]}
+          toolBarRender={this.renderToolBar}
         />
         <CreateForm
           onSubmit={this.createSubmit}
